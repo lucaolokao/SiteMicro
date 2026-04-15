@@ -1,131 +1,100 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, BarChart, Bar
-} from 'recharts';
-import { DollarSign, MousePointerClick, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { MousePointerClick, TrendingUp, Package, Info, ExternalLink } from 'lucide-react';
+import { useProducts } from '../../context/ProductsContext';
 
-const dailyData = Array.from({ length: 30 }, (_, i) => ({
-  day: i + 1,
-  receita: Math.floor(Math.random() * 500) + 100,
-  cliques: Math.floor(Math.random() * 1000) + 200,
-  comissao: Math.floor(Math.random() * 25) + 5,
-}));
-
-const topEarning = [
-  { nome: 'ESP32 Dev Board', comissao: 'R$ 127,40', cliques: 4521, taxa: '6.9%', cat: '📡' },
-  { nome: 'Arduino Uno R3', comissao: 'R$ 98,60', cliques: 3987, taxa: '7.2%', cat: '🔵' },
-  { nome: 'Kit Starter Arduino', comissao: 'R$ 215,30', cliques: 2543, taxa: '5.7%', cat: '📦' },
-  { nome: 'OLED 0.96" I2C', comissao: 'R$ 58,20', cliques: 2987, taxa: '6.6%', cat: '📺' },
-  { nome: 'DHT22 Sensor', comissao: 'R$ 39,80', cliques: 2765, taxa: '7.1%', cat: '🌡️' },
-];
-
-const barWidths = topEarning.map((_, i) => i === 0 ? 100 : Math.floor(Math.random() * 70 + 20));
-
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload?.length) {
-    return (
-      <div className="bg-white border border-[#E2EBF6] rounded-xl p-3 text-xs shadow-lg">
-        <p className="text-gray-400 mb-2">Dia {label}</p>
-        {payload.map((p) => (
-          <p key={p.name} style={{ color: p.color }}>
-            {p.name}: <b>{p.name === 'receita' || p.name === 'comissao' ? `R$ ${p.value}` : p.value}</b>
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
+function getRealClickData(products) {
+  return products
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      clicks: parseInt(localStorage.getItem(`clicks_${p.id}`) || '0'),
+      affiliateLink: p.affiliateLink,
+    }))
+    .filter((p) => p.clicks > 0)
+    .sort((a, b) => b.clicks - a.clicks);
+}
 
 export default function AdminSales() {
-  const totalReceita = dailyData.reduce((s, d) => s + d.receita, 0);
-  const totalComissao = dailyData.reduce((s, d) => s + d.comissao, 0);
-  const totalCliques = dailyData.reduce((s, d) => s + d.cliques, 0);
+  const { products } = useProducts();
+  const totalClicks = parseInt(localStorage.getItem('total_clicks') || '0');
+  const clickData = useMemo(() => getRealClickData(products), [products]);
 
   return (
     <div className="p-6 lg:p-8">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-8">
-        <h1 className="text-2xl font-black text-[#0D1B2E]">Vendas & Lucros</h1>
-        <p className="text-gray-500 text-sm mt-1">Analise detalhada de receita e comissoes afiliadas</p>
+        <h1 className="text-2xl font-black text-[#0D1B2E]">Cliques & Afiliados</h1>
+        <p className="text-gray-500 text-sm mt-1">Rastreamento real de cliques nos links afiliados</p>
       </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {[
-          { icon: DollarSign, label: 'Receita (30 dias)', value: `R$ ${totalReceita.toLocaleString('pt-BR')}`, trend: '+24.5%', color: 'text-green-600', bg: 'bg-green-50 border-green-200' },
-          { icon: TrendingUp, label: 'Comissoes (30 dias)', value: `R$ ${totalComissao.toLocaleString('pt-BR')}`, trend: '+18.2%', color: 'text-[#0F52BA]', bg: 'bg-[#EEF3FF] border-[#0F52BA]/15' },
-          { icon: MousePointerClick, label: 'Total Cliques', value: totalCliques.toLocaleString('pt-BR'), trend: '+31.7%', color: 'text-[#0F52BA]', bg: 'bg-[#EEF3FF] border-[#0F52BA]/15' },
-          { icon: TrendingUp, label: 'Taxa Conversao Media', value: '4.8%', trend: '+0.4%', color: 'text-orange-600', bg: 'bg-orange-50 border-orange-200' },
+          { icon: MousePointerClick, label: 'Total de Cliques', value: totalClicks.toLocaleString('pt-BR'), color: 'text-[#0F52BA]', bg: 'bg-[#EEF3FF] border-[#0F52BA]/15' },
+          { icon: Package, label: 'Produtos com Cliques', value: clickData.length, color: 'text-green-600', bg: 'bg-green-50 border-green-200' },
+          { icon: TrendingUp, label: 'Produtos no Catálogo', value: products.length, color: 'text-purple-600', bg: 'bg-purple-50 border-purple-200' },
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
             className={`${s.bg} border rounded-2xl p-5`}>
-            <div className="flex items-center justify-between mb-3">
-              <s.icon size={18} className={s.color} />
-              <span className="text-xs font-bold text-green-600 flex items-center gap-1">
-                <ArrowUpRight size={11} />{s.trend}
-              </span>
-            </div>
+            <s.icon size={18} className={`${s.color} mb-3`} />
             <div className={`text-2xl font-black ${s.color} mb-0.5`}>{s.value}</div>
             <div className="text-xs text-gray-500">{s.label}</div>
           </motion.div>
         ))}
       </div>
 
-      {/* Revenue Chart */}
-      <div className="grid lg:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white rounded-2xl border border-[#E2EBF6] p-5 shadow-sm">
-          <h3 className="text-sm font-bold text-[#0D1B2E] mb-1">Receita Diaria (ultimos 30 dias)</h3>
-          <p className="text-xs text-gray-400 mb-5">Valores de receita gerada via links afiliados</p>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2EBF6" />
-              <XAxis dataKey="day" tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="receita" stroke="#10b981" strokeWidth={2} dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-[#E2EBF6] p-5 shadow-sm">
-          <h3 className="text-sm font-bold text-[#0D1B2E] mb-1">Cliques Diarios</h3>
-          <p className="text-xs text-gray-400 mb-5">Total de cliques nos links afiliados</p>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2EBF6" />
-              <XAxis dataKey="day" tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="cliques" fill="#0F52BA" radius={[2, 2, 0, 0]} opacity={0.8} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+      {/* Click Tracking Table */}
+      <div className="bg-white rounded-2xl border border-[#E2EBF6] p-5 shadow-sm mb-6">
+        <h3 className="text-sm font-bold text-[#0D1B2E] mb-4">Produtos Mais Clicados</h3>
+        {clickData.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center">
+            <MousePointerClick size={40} className="text-gray-200 mb-3" />
+            <p className="text-sm font-semibold text-gray-400">Nenhum clique registrado ainda</p>
+            <p className="text-xs text-gray-300 mt-1">
+              Os dados aparecem quando usuários clicam em "Comprar no AliExpress".
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {clickData.map((p, i) => (
+              <div key={p.id} className="flex items-center gap-4 p-3 rounded-xl bg-[#F8FAFC] hover:bg-[#F0F6FF] transition-colors">
+                <span className="text-xs text-gray-400 w-5 font-bold shrink-0">{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-[#0D1B2E] truncate">{p.name}</div>
+                  <div className="text-xs text-gray-400 capitalize">{p.category}</div>
+                </div>
+                <div className="flex items-center gap-1 text-sm font-black text-[#0F52BA] shrink-0">
+                  <MousePointerClick size={13} /> {p.clicks}
+                </div>
+                <div className="w-24 bg-[#E2EBF6] rounded-full h-1.5 shrink-0">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#0F52BA] to-cyan-400 rounded-full"
+                    style={{ width: `${Math.min(100, (p.clicks / (clickData[0]?.clicks || 1)) * 100)}%` }}
+                  />
+                </div>
+                <a href={p.affiliateLink} target="_blank" rel="noopener noreferrer"
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-[#0F52BA] hover:bg-[#EEF3FF] transition-colors shrink-0">
+                  <ExternalLink size={13} />
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Top Earning Products */}
-      <div className="bg-white rounded-2xl border border-[#E2EBF6] p-5 shadow-sm">
-        <h3 className="text-sm font-bold text-[#0D1B2E] mb-4">Produtos que mais geraram receita</h3>
-        <div className="space-y-3">
-          {topEarning.map((p, i) => (
-            <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-[#F8FAFC] hover:bg-[#F0F6FF] transition-colors">
-              <span className="text-xl w-8 text-center">{p.cat}</span>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold text-[#0D1B2E]">{p.nome}</div>
-                <div className="text-xs text-gray-400">{p.cliques.toLocaleString()} cliques • Taxa: {p.taxa}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-black text-green-600">{p.comissao}</div>
-                <div className="text-[10px] text-gray-400">comissão</div>
-              </div>
-              <div className="w-20 bg-[#E2EBF6] rounded-full h-1.5">
-                <div
-                  className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full"
-                  style={{ width: `${barWidths[i]}%` }}
-                />
-              </div>
-            </div>
-          ))}
+      {/* Info Card */}
+      <div className="bg-[#F8FAFF] border border-[#E2EBF6] rounded-2xl p-5">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] flex items-center justify-center shrink-0">
+            <Info size={16} className="text-[#0F52BA]" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-[#0D1B2E] mb-1">Sobre rastreamento de receita</h4>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              O rastreamento de receita e comissões requer integração com a API de Afiliados do AliExpress (Portals). Após cadastrar seu ID de afiliado, comissões serão rastreadas automaticamente pelo painel do AliExpress Partner Center.
+            </p>
+          </div>
         </div>
       </div>
     </div>

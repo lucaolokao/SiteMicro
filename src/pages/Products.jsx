@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X, ChevronDown, Grid3x3, List, ArrowRight } from 'lucide-react';
-import { products } from '../data/products';
+import { Search, SlidersHorizontal, X, ChevronDown, Grid3x3, List, ArrowRight, Bot } from 'lucide-react';
 import { categories } from '../data/categories';
 import { useApp } from '../context/AppContext';
+import { useProducts } from '../context/ProductsContext';
 import ProductCard from '../components/products/ProductCard';
 
 const sortOptions = [
@@ -20,6 +20,20 @@ function calcDiscount(price, oldPrice) {
   return Math.round(((oldPrice - price) / oldPrice) * 100);
 }
 
+function detectCategory(query) {
+  const q = query.toLowerCase();
+  if (q.includes('arduino')) return 'arduino';
+  if (q.includes('esp32') || q.includes('esp8266') || q.includes('nodemcu') || q.includes('wemos')) return 'esp';
+  if (q.includes('sensor') || q.includes('dht') || q.includes('pir') || q.includes('ultrasonic') || q.includes('bmp') || q.includes('mpu')) return 'sensores';
+  if (q.includes('display') || q.includes('oled') || q.includes('lcd') || q.includes('tft')) return 'displays';
+  if (q.includes('motor') || q.includes('servo') || q.includes('stepper') || q.includes('nema') || q.includes('l298')) return 'motores';
+  if (q.includes('bluetooth') || q.includes('wifi') || q.includes('lora') || q.includes('nrf') || q.includes('hc-05') || q.includes('hc05')) return 'comunicacao';
+  if (q.includes('power') || q.includes('bateria') || q.includes('tp4056') || q.includes('lm2596') || q.includes('buck')) return 'power';
+  if (q.includes('kit') || q.includes('starter') || q.includes('conjunto')) return 'kits';
+  if (q.includes('resistor') || q.includes('led') || q.includes('breadboard') || q.includes('jumper') || q.includes('capacitor')) return 'componentes';
+  return 'outros';
+}
+
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
@@ -28,13 +42,62 @@ export default function Products() {
   const [selectedCats, setSelectedCats] = useState([]);
   const [sortBy, setSortBy] = useState('popular');
   const [maxPrice, setMaxPrice] = useState(100);
-  const { setSearch } = useApp();
+  const [aiSearching, setAiSearching] = useState(false);
+  const searchedQueries = useRef(new Set());
+  const { setSearch, notify } = useApp();
+  const { products, addProduct } = useProducts();
 
   useEffect(() => {
     const q = searchParams.get('q') || '';
     setLocalSearch(q);
     setSearch(q);
   }, [searchParams]);
+
+  // Trigger AI search when no local results
+  useEffect(() => {
+    if (
+      filtered.length === 0 &&
+      localSearch.trim() &&
+      !aiSearching &&
+      !searchedQueries.current.has(localSearch.toLowerCase())
+    ) {
+      runAiSearch(localSearch.trim());
+    }
+  }, [filtered.length, localSearch]);
+
+  const runAiSearch = async (query) => {
+    searchedQueries.current.add(query.toLowerCase());
+    setAiSearching(true);
+    try {
+      const res = await fetch(`/api/ai-search?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+
+      if (res.ok && data.name) {
+        addProduct({
+          name: data.name,
+          category: detectCategory(query),
+          price: data.price > 0 ? data.price : 5.99,
+          oldPrice: data.oldPrice > 0 ? data.oldPrice : (data.price || 5.99) * 1.8,
+          affiliateLink: data.url || `https://www.aliexpress.com/wholesale?SearchText=${encodeURIComponent(query)}&SortType=price_asc`,
+          image: data.image || '',
+          description: `${data.name} — encontrado pela IA no AliExpress com base na sua pesquisa.`,
+          badge: 'IA Encontrou',
+          tags: ['IA', 'Novo'],
+          rating: data.rating || 4.5,
+          reviews: data.reviews || 0,
+          sold: 0,
+          source: 'ai',
+        });
+        notify(`IA encontrou: ${data.name}`, 'success');
+      } else {
+        notify('IA não encontrou resultados para essa busca', 'info');
+      }
+    } catch {
+      notify('Erro ao conectar com a IA. Verifique sua conexão.', 'error');
+    } finally {
+      setAiSearching(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     let result = [...products];
@@ -65,7 +128,7 @@ export default function Products() {
     }
 
     return result;
-  }, [localSearch, selectedCats, sortBy, maxPrice]);
+  }, [products, localSearch, selectedCats, sortBy, maxPrice]);
 
   const toggleCat = (id) =>
     setSelectedCats((prev) => prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]);
@@ -244,7 +307,34 @@ export default function Products() {
         </AnimatePresence>
 
         {/* Products Grid */}
-        {filtered.length === 0 ? (
+        {aiSearching ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-24"
+          >
+            <motion.div
+              animate={{ scale: [1, 1.12, 1] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#EEF3FF] border border-[#0F52BA]/20 flex items-center justify-center"
+            >
+              <Bot size={36} className="text-[#0F52BA]" />
+            </motion.div>
+            <h3 className="text-xl font-bold text-[#0D1B2E] mb-2">
+              IA procurando <span className="text-[#0F52BA]">"{localSearch}"</span>...
+            </h3>
+            <p className="text-gray-500 text-sm mb-6">
+              Buscando no AliExpress pelo melhor produto para você
+            </p>
+            <div className="w-56 h-1.5 mx-auto bg-[#E2EBF6] rounded-full overflow-hidden">
+              <motion.div
+                animate={{ x: ['-100%', '200%'] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                className="h-full w-1/2 bg-gradient-to-r from-[#0F52BA] to-cyan-400 rounded-full"
+              />
+            </div>
+          </motion.div>
+        ) : filtered.length === 0 ? (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
             <div className="text-5xl mb-4">🔍</div>
             <h3 className="text-xl font-bold text-[#0D1B2E] mb-2">Nenhum produto encontrado</h3>
@@ -254,15 +344,27 @@ export default function Products() {
             </button>
           </motion.div>
         ) : (
-          <div className={`grid gap-3 sm:gap-4 ${
-            gridView
-              ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
-              : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-          }`}>
-            {filtered.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
-            ))}
-          </div>
+          <>
+            {filtered.some((p) => p.source === 'ai') && localSearch && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-4 flex items-center gap-2.5 px-4 py-3 bg-[#EEF3FF] border border-[#0F52BA]/20 rounded-xl text-sm text-[#0F52BA] font-semibold"
+              >
+                <Bot size={16} className="shrink-0" />
+                <span>A IA encontrou este produto e o adicionou ao catálogo automaticamente.</span>
+              </motion.div>
+            )}
+            <div className={`grid gap-3 sm:gap-4 ${
+              gridView
+                ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+            }`}>
+              {filtered.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))}
+            </div>
+          </>
         )}
       </div>
     </main>

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useProducts } from '../../context/ProductsContext';
+import { categories } from '../../data/categories';
 
 function Counter({ target, suffix = '', prefix = '' }) {
   const [count, setCount] = useState(0);
@@ -23,16 +25,22 @@ function Counter({ target, suffix = '', prefix = '' }) {
   return <span ref={ref}>{prefix}{count.toLocaleString('pt-BR')}{suffix}</span>;
 }
 
-const stats = [
-  { label: 'Produtos Indexados', value: 1100, suffix: '+', icon: '📦' },
-  { label: 'Categorias', value: 10, suffix: '', icon: '🗂️' },
-  { label: 'Sellers Monitorados', value: 5000, suffix: '+', icon: '🏪' },
-  { label: 'Cliques no Mês', value: 127000, suffix: '+', icon: '🖱️' },
-  { label: 'Economia Média', value: 62, suffix: '%', icon: '💰' },
-  { label: 'Usuários Ativos', value: 85000, suffix: '+', icon: '👥' },
-];
-
 export default function StatsSection() {
+  const { products } = useProducts();
+
+  const avgDiscount = (() => {
+    const valid = products.filter((p) => p.oldPrice > p.price);
+    if (!valid.length) return 0;
+    const sum = valid.reduce((acc, p) => acc + Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100), 0);
+    return Math.round(sum / valid.length);
+  })();
+
+  const stats = [
+    { label: 'Produtos Indexados', value: products.length, suffix: '', icon: '📦' },
+    { label: 'Categorias', value: categories.length, suffix: '', icon: '🗂️' },
+    { label: 'Economia Média', value: avgDiscount, suffix: '%', icon: '💰' },
+  ];
+
   return (
     <section className="py-16 bg-white border-t border-[#E2EBF6]">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,21 +56,21 @@ export default function StatsSection() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-2xl mx-auto">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.07 }}
-              className="flex flex-col items-center text-center p-5 rounded-2xl bg-[#F8FAFF] border border-[#E2EBF6] hover:border-[#0F52BA]/20 hover:shadow-sm transition-all"
+              transition={{ delay: i * 0.1 }}
+              className="flex flex-col items-center text-center p-6 rounded-2xl bg-[#F8FAFF] border border-[#E2EBF6] hover:border-[#0F52BA]/20 hover:shadow-sm transition-all"
             >
-              <div className="text-2xl mb-2">{stat.icon}</div>
-              <div className="text-xl sm:text-2xl font-black text-[#0F52BA] leading-none mb-1">
+              <div className="text-3xl mb-3">{stat.icon}</div>
+              <div className="text-3xl font-black text-[#0F52BA] leading-none mb-1">
                 <Counter target={stat.value} suffix={stat.suffix} />
               </div>
-              <div className="text-[11px] text-gray-500 leading-tight">{stat.label}</div>
+              <div className="text-sm text-gray-500 leading-tight">{stat.label}</div>
             </motion.div>
           ))}
         </div>
