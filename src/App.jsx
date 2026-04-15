@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Notifications from "./components/ui/Notifications";
@@ -43,6 +44,7 @@ export default function App() {
   return (
     <>
       <Notifications />
+      <Analytics />
       <Routes>
         {/* Secret admin login page */}
         <Route path="/painel/login" element={<AdminLogin />} />
