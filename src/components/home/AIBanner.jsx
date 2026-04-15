@@ -4,9 +4,9 @@ import { Bot, Search, CheckCircle, TrendingDown, RefreshCw, Link2 } from 'lucide
 
 const steps = [
   { icon: Search, label: 'Buscando no AliExpress', detail: 'Analisando 50.000+ produtos...', color: 'text-blue-200' },
-  { icon: TrendingDown, label: 'Comparando precos', detail: 'Encontrando o menor preco global', color: 'text-cyan-200' },
+  { icon: TrendingDown, label: 'Comparando preços', detail: 'Encontrando o menor preço global', color: 'text-cyan-200' },
   { icon: Link2, label: 'Gerando link afiliado', detail: 'Criando URL de rastreamento', color: 'text-blue-100' },
-  { icon: CheckCircle, label: 'Publicando anuncio', detail: 'Produto adicionado ao catalogo!', color: 'text-green-300' },
+  { icon: CheckCircle, label: 'Publicando anúncio', detail: 'Produto adicionado ao catálogo!', color: 'text-green-300' },
 ];
 
 const recentFinds = [
@@ -34,8 +34,8 @@ export default function AIBanner() {
   }, [isRunning]);
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#F0F6FF]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-20 bg-[#F0F6FF]">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl sapphire-section shadow-2xl shadow-[#0F52BA]/30">
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
@@ -48,13 +48,13 @@ export default function AIBanner() {
                 MicroAI Engine v2.0 — Ativo
               </div>
               <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 leading-tight">
-                Nossa IA encontra os melhores precos <span className="text-cyan-300">para voce</span>
+                Nossa IA encontra os melhores preços <span className="text-cyan-300">para você</span>
               </h2>
               <p className="text-blue-100 mb-8 leading-relaxed text-sm">
-                O MicroAI vasculha o AliExpress 24/7, identificando os menores precos e gerando links de afiliado automaticamente.
+                O MicroAI vasculha o AliExpress 24/7, identificando os menores preços e gerando links de afiliado automaticamente.
               </p>
               <div className="space-y-2.5 mb-8">
-                {['Busca automatica por palavras-chave tecnicas', 'Comparacao de precos entre multiplos sellers', 'Verificacao de avaliacoes e reputacao', 'Geracao automatica de links de afiliado', 'Publicacao no catalogo em tempo real'].map((item) => (
+                {['Busca automática por palavras-chave técnicas', 'Comparação de preços entre múltiplos sellers', 'Verificação de avaliações e reputação', 'Geração automática de links de afiliado', 'Publicação no catálogo em tempo real'].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-sm text-blue-100">
                     <CheckCircle size={14} className="text-green-300 shrink-0" />
                     {item}

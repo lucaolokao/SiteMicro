@@ -28,7 +28,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#010912] via-[#0F52BA]/20 to-[#010912] flex items-center justify-center p-4">
+    <div className="relative min-h-screen bg-gradient-to-br from-[#010912] via-[#0F52BA]/20 to-[#010912] flex items-center justify-center p-4">
       {/* Background grid */}
       <div className="absolute inset-0 opacity-[0.03]"
         style={{

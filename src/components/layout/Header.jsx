@@ -180,7 +180,7 @@ export default function Header() {
           </AnimatePresence>
 
           {/* Wishlist */}
-          <Link to="/favoritos"
+          <Link to="/produtos"
             className="hidden sm:flex w-9 h-9 items-center justify-center rounded-xl bg-[#F0F6FF] hover:bg-rose-50 border border-[#E2EBF6] hover:border-rose-200 text-[#475569] hover:text-rose-500 transition-colors relative">
             <Heart size={16} />
             {wishlist.length > 0 && (

@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { NavLink, Outlet, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, TrendingUp, Bot, Settings, ChevronRight, Activity, LogOut, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Package, TrendingUp, Bot, Settings, ChevronRight, Activity, LogOut, ArrowLeft, Menu, X } from "lucide-react";
 import { adminLogout } from "../../utils/adminAuth";
 
 const navItems = [
@@ -11,6 +12,7 @@ const navItems = [
 ];
 
 export default function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -20,8 +22,16 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen flex bg-[#F8FAFF]">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-30 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-60 shrink-0 bg-white border-r border-[#E2EBF6] flex flex-col fixed top-0 bottom-0 z-40">
+      <aside className={`w-60 shrink-0 bg-white border-r border-[#E2EBF6] flex flex-col fixed top-0 bottom-0 z-40 transition-transform duration-200 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         {/* Brand */}
         <div className="px-5 py-5 border-b border-[#E2EBF6]">
           <Link to="/" className="flex items-center gap-1.5 mb-4 text-xs text-gray-400 hover:text-[#0F52BA] transition-colors font-medium">
@@ -45,6 +55,7 @@ export default function AdminLayout() {
               key={to}
               to={to}
               end={end}
+              onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors group " +
                 (isActive
@@ -76,11 +87,23 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 min-h-screen" style={{ marginLeft: '240px' }}>
+      <main className="flex-1 min-h-screen lg:ml-60">
+        {/* Mobile top bar */}
+        <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white border-b border-[#E2EBF6] sticky top-0 z-20">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#F0F6FF] border border-[#E2EBF6] text-[#475569]"
+            aria-label="Abrir menu"
+          >
+            <Menu size={17} />
+          </button>
+          <div className="flex items-center gap-2">
+            <Activity size={15} className="text-[#0F52BA]" />
+            <span className="text-sm font-black text-[#0D1B2E]">Painel Admin</span>
+          </div>
+        </div>
         <Outlet />
       </main>
     </div>
   );
 }
-
-

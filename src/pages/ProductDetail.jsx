@@ -97,11 +97,11 @@ export default function ProductDetail() {
             </div>
 
             {/* Trust badges */}
-            <div className="grid grid-cols-3 gap-3 mt-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
               {[
                 { icon: Shield, label: 'Compra Segura', sub: 'Via AliExpress' },
-                { icon: Truck, label: 'Frete Gratis', sub: product.deliveryDays },
-                { icon: RefreshCw, label: 'Preco Atualizado', sub: 'Pela nossa IA' },
+                { icon: Truck, label: 'Frete Grátis', sub: product.deliveryDays },
+                { icon: RefreshCw, label: 'Preço Atualizado', sub: 'Pela nossa IA' },
               ].map(({ icon: Icon, label, sub }) => (
                 <div key={label} className="flex flex-col items-center text-center p-3 bg-white rounded-2xl border border-[#E2EBF6] shadow-sm">
                   <Icon size={18} className="text-[#0F52BA] mb-1" />

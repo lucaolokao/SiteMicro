@@ -33,7 +33,7 @@ export default function ProductCard({ product, index = 0 }) {
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3) }}
       className="h-full"
     >
-      <div className="group flex flex-col h-full bg-white rounded-2xl border border-[#E2EBF6] hover:border-[#0F52BA]/25 shadow-sm hover:shadow-lg hover:shadow-[#0F52BA]/8 transition-all duration-250 hover:-translate-y-1 overflow-hidden">
+      <div className="group flex flex-col h-full bg-white rounded-2xl border border-[#E2EBF6] hover:border-[#0F52BA]/25 shadow-sm hover:shadow-lg hover:shadow-[#0F52BA]/8 transition-all duration-300 hover:-translate-y-1 overflow-hidden">
 
         {/* Image */}
         <div className="relative bg-[#F8FAFF] overflow-hidden" style={{ aspectRatio: '1/1' }}>

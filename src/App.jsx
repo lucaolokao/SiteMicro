@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import Notifications from "./components/ui/Notifications";
@@ -13,6 +13,16 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminSales from "./pages/admin/AdminSales";
 import AdminAI from "./pages/admin/AdminAI";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
+
+function PublicLayout() {
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
+}
 
 function NotFound() {
   return (
@@ -53,21 +63,16 @@ export default function App() {
         {/* Old /admin redirects to login */}
         <Route path="/admin/*" element={<Navigate to="/painel/login" replace />} />
 
-        {/* Public routes */}
-        <Route path="*" element={
-          <>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/produtos" element={<Products />} />
-              <Route path="/produto/:id" element={<ProductDetail />} />
-              <Route path="/categorias" element={<Categories />} />
-              <Route path="/categorias/:id" element={<Categories />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer />
-          </>
-        } />
+        {/* Public routes — use Outlet instead of nested <Routes> */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/produtos" element={<Products />} />
+          <Route path="/produto/:id" element={<ProductDetail />} />
+          <Route path="/categorias" element={<Categories />} />
+          <Route path="/categorias/:id" element={<Categories />} />
+          <Route path="/favoritos" element={<Navigate to="/produtos" replace />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
     </>
   );

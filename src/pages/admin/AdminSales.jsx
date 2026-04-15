@@ -20,6 +20,8 @@ const topEarning = [
   { nome: 'DHT22 Sensor', comissao: 'R$ 39,80', cliques: 2765, taxa: '7.1%', cat: '🌡️' },
 ];
 
+const barWidths = topEarning.map((_, i) => i === 0 ? 100 : Math.floor(Math.random() * 70 + 20));
+
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
     return (
@@ -114,12 +116,12 @@ export default function AdminSales() {
               </div>
               <div className="text-right">
                 <div className="text-sm font-black text-green-600">{p.comissao}</div>
-                <div className="text-[10px] text-gray-400">comissao</div>
+                <div className="text-[10px] text-gray-400">comissão</div>
               </div>
               <div className="w-20 bg-[#E2EBF6] rounded-full h-1.5">
                 <div
                   className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full"
-                  style={{ width: `${(i === 0 ? 100 : Math.random() * 70 + 20)}%` }}
+                  style={{ width: `${barWidths[i]}%` }}
                 />
               </div>
             </div>

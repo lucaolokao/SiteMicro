@@ -42,7 +42,7 @@ export default function CategoryGrid() {
                 to={`/categorias/${cat.id}`}
                 className="group flex flex-col items-center text-center p-4 rounded-2xl bg-white border border-[#E2EBF6] hover:border-[#0F52BA]/25 shadow-sm hover:shadow-md hover:shadow-[#0F52BA]/8 transition-all duration-200 hover:-translate-y-1"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-250`}>
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                   {cat.icon}
                 </div>
                 <h3 className="text-xs font-bold text-[#0D1B2E] group-hover:text-[#0F52BA] transition-colors leading-snug mb-0.5">{cat.name}</h3>

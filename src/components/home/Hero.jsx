@@ -22,8 +22,8 @@ export default function Hero() {
 
   return (
     <section
-      className="relative flex flex-col items-center justify-center overflow-hidden"
-      style={{ minHeight: 'calc(100svh - var(--header-h, 64px))', paddingTop: '3rem', paddingBottom: '3rem' }}
+      className="relative flex flex-col items-center justify-center overflow-hidden pt-12 pb-12"
+      style={{ minHeight: 'calc(100svh - var(--header-h, 64px))' }}
     >
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#EEF3FF] via-white to-[#F0F6FF]">
@@ -185,10 +185,17 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Price ticker */}
+      {/* Price ticker — items duplicated so the -50% animation loops seamlessly */}
       <div className="absolute bottom-0 left-0 right-0 border-t border-[#E2EBF6] bg-white/80 backdrop-blur-sm py-1.5 overflow-hidden pointer-events-none">
         <div className="animate-ticker inline-flex gap-8 whitespace-nowrap">
-          {['Arduino Uno R3 → R$17,99', 'ESP32 → R$14,89', 'DHT22 → R$9,99', 'OLED 0.96" → R$7,49', 'HC-SR04 → R$2,49', 'L298N → R$6,49', 'Servo SG90 → R$4,99', 'ESP32-CAM → R$29,99', 'MPU6050 → R$6,49', 'LoRa SX1278 → R$17,49', 'Arduino Uno R3 → R$17,99', 'ESP32 → R$14,89', 'DHT22 → R$9,99', 'OLED 0.96" → R$7,49', 'HC-SR04 → R$2,49'].map((item, i) => (
+          {[
+            'Arduino Uno R3 → R$17,99', 'ESP32 → R$14,89', 'DHT22 → R$9,99', 'OLED 0.96" → R$7,49',
+            'HC-SR04 → R$2,49', 'L298N → R$6,49', 'Servo SG90 → R$4,99', 'ESP32-CAM → R$29,99',
+            'MPU6050 → R$6,49', 'LoRa SX1278 → R$17,49',
+            'Arduino Uno R3 → R$17,99', 'ESP32 → R$14,89', 'DHT22 → R$9,99', 'OLED 0.96" → R$7,49',
+            'HC-SR04 → R$2,49', 'L298N → R$6,49', 'Servo SG90 → R$4,99', 'ESP32-CAM → R$29,99',
+            'MPU6050 → R$6,49', 'LoRa SX1278 → R$17,49',
+          ].map((item, i) => (
             <span key={i} className="text-[11px] text-[#475569] font-medium">
               <span className="text-emerald-600 font-bold">↓</span> {item}
               <span className="mx-4 text-gray-200">|</span>

@@ -13,30 +13,30 @@ const footerLinks = {
     { label: 'Categorias', to: '/categorias' },
     { label: 'Mais Vendidos', to: '/produtos?sort=bestseller' },
     { label: 'Novidades', to: '/produtos?sort=new' },
-    { label: 'Promocoes', to: '/produtos?sort=discount' },
+    { label: 'Promoções', to: '/produtos?sort=discount' },
   ],
-  Informacoes: [
-    { label: 'Sobre Nos', to: '/sobre' },
+  Informações: [
+    { label: 'Sobre Nós', to: '/sobre' },
     { label: 'Como Funciona', to: '/como-funciona' },
     { label: 'Links de Afiliados', to: '/afiliados' },
-    { label: 'Politica de Privacidade', to: '/privacidade' },
+    { label: 'Política de Privacidade', to: '/privacidade' },
     { label: 'Termos de Uso', to: '/termos' },
   ],
 };
 
 const features = [
-  { icon: Bot, label: 'IA Busca Precos', desc: 'Sempre o menor preco' },
-  { icon: Zap, label: 'Atualizacao 24/7', desc: 'Precos sempre atuais' },
+  { icon: Bot, label: 'IA Busca Preços', desc: 'Sempre o menor preço' },
+  { icon: Zap, label: 'Atualização 24/7', desc: 'Preços sempre atuais' },
   { icon: Shield, label: 'Links Seguros', desc: 'AliExpress verificado' },
-  { icon: Truck, label: 'Frete Gratis', desc: 'Na maioria dos itens' },
+  { icon: Truck, label: 'Frete Grátis', desc: 'Na maioria dos itens' },
 ];
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-[#E2EBF6] mt-20">
+    <footer className="bg-white border-t border-[#E2EBF6] mt-8">
       {/* Feature Strip */}
       <div className="bg-[#F0F6FF] border-b border-[#E2EBF6]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map(({ icon: Icon, label, desc }) => (
               <div key={label} className="flex items-center gap-3 group">
@@ -54,7 +54,7 @@ export default function Footer() {
       </div>
 
       {/* Main */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
@@ -65,7 +65,7 @@ export default function Footer() {
               <span className="text-xl font-black text-[#0D1B2E]">MicroShop</span>
             </Link>
             <p className="text-sm text-gray-500 leading-relaxed mb-5">
-              Central de componentes eletronicos com os menores precos do mercado, alimentada por IA que vasculha o AliExpress 24/7.
+              Central de componentes eletrônicos com os menores preços do mercado, alimentada por IA que vasculha o AliExpress 24/7.
             </p>
             <div className="flex items-center gap-2">
               {[
@@ -102,7 +102,7 @@ export default function Footer() {
           {/* Newsletter */}
           <div>
             <h4 className="text-xs font-black text-[#0D1B2E] mb-4 uppercase tracking-widest">Newsletter</h4>
-            <p className="text-sm text-gray-500 mb-4">Receba alertas de promocoes direto no e-mail.</p>
+            <p className="text-sm text-gray-500 mb-4">Receba alertas de promoções direto no e-mail.</p>
             <form className="space-y-2" onSubmit={(e) => e.preventDefault()}>
               <input type="email" placeholder="seu@email.com"
                 className="w-full px-4 py-2.5 bg-[#F0F6FF] border border-[#E2EBF6] rounded-xl text-sm text-[#0D1B2E] placeholder-gray-400 outline-none focus:border-[#0F52BA]/50 transition-all" />

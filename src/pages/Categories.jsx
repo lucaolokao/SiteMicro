@@ -74,7 +74,7 @@ export default function Categories() {
                 to={`/categorias/${cat.id}`}
                 className="group flex flex-col items-center text-center p-5 rounded-2xl bg-white border border-[#E2EBF6] hover:border-[#0F52BA]/25 shadow-sm hover:shadow-md hover:shadow-[#0F52BA]/8 transition-all duration-200 hover:-translate-y-1 h-full"
               >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-2xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-250`}>
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-2xl mb-3 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                   {cat.icon}
                 </div>
                 <h3 className="text-sm font-bold text-[#0D1B2E] group-hover:text-[#0F52BA] transition-colors mb-1">{cat.name}</h3>

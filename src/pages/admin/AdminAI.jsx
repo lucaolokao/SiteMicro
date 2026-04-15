@@ -27,12 +27,12 @@ export default function AdminAI() {
   const [progress, setProgress] = useState(47);
   const [logs, setLogs] = useState([
     { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Sistema inicializado', type: 'info' },
-    { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Conectado a API AliExpress', type: 'success' },
+    { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Conectado à API AliExpress', type: 'success' },
     { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Buscando: "esp32 wroom"...', type: 'search' },
     { time: new Date().toLocaleTimeString('pt-BR'), msg: '43 resultados encontrados', type: 'info' },
-    { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Menor preco: $3.29 (↓67%)', type: 'success' },
+    { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Menor preço: $3.29 (↓67%)', type: 'success' },
     { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Link afiliado gerado', type: 'success' },
-    { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Produto publicado no catalogo', type: 'success' },
+    { time: new Date().toLocaleTimeString('pt-BR'), msg: 'Produto publicado no catálogo', type: 'success' },
   ]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function AdminAI() {
             <Bot size={24} className="text-[#0F52BA]" />
             Motor IA
           </h1>
-          <p className="text-gray-500 text-sm mt-1">MicroAI Engine — Busca automatica de produtos e precos</p>
+          <p className="text-gray-500 text-sm mt-1">MicroAI Engine — Busca automática de produtos e preços</p>
         </div>
         <button
           onClick={() => setRunning(!running)}
@@ -75,7 +75,7 @@ export default function AdminAI() {
         </button>
       </motion.div>
 
-      <div className="grid lg:grid-cols-3 gap-6 mb-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         {[
           { icon: Search, label: 'Buscas hoje', value: '2.847', color: 'text-[#0F52BA] bg-[#EEF3FF] border-[#0F52BA]/15' },
           { icon: TrendingDown, label: 'Produtos novos', value: '143', color: 'text-green-600 bg-green-50 border-green-200' },
@@ -125,10 +125,10 @@ export default function AdminAI() {
           <div className="space-y-2">
             {[
               { icon: Search, label: 'Busca AliExpress', status: running },
-              { icon: TrendingDown, label: 'Analise de precos', status: running },
-              { icon: CheckCircle, label: 'Verificacao de reviews', status: running },
-              { icon: Link2, label: 'Geracao de links', status: running },
-              { icon: Database, label: 'Publicacao no catalogo', status: running },
+              { icon: TrendingDown, label: 'Análise de preços', status: running },
+              { icon: CheckCircle, label: 'Verificação de reviews', status: running },
+              { icon: Link2, label: 'Geração de links', status: running },
+              { icon: Database, label: 'Publicação no catálogo', status: running },
             ].map((step, i) => (
               <div key={i} className="flex items-center gap-3 text-xs">
                 <step.icon size={13} className={step.status ? 'text-[#0F52BA]' : 'text-gray-300'} />
@@ -159,7 +159,7 @@ export default function AdminAI() {
           <div className="space-y-1.5 max-h-[240px] overflow-y-auto">
             {logs.map((log, i) => (
               <div key={i} className="flex gap-2 text-[10px]">
-                <span className="text-blue-900 shrink-0">{log.time}</span>
+          <span className="text-blue-300 shrink-0">{log.time}</span>
                 <span className={
                   log.type === 'success' ? 'text-green-400' :
                   log.type === 'search' ? 'text-blue-400' :
@@ -198,14 +198,14 @@ export default function AdminAI() {
       {/* Config */}
       <div className="bg-white rounded-2xl border border-[#E2EBF6] p-5 shadow-sm">
         <h3 className="text-sm font-bold text-[#0D1B2E] mb-4 flex items-center gap-2">
-          <Settings size={16} className="text-gray-400" /> Configuracoes da IA
+          <Settings size={16} className="text-gray-400" /> Configurações da IA
         </h3>
         <div className="grid sm:grid-cols-2 gap-4">
           {[
             { label: 'Intervalo de busca', value: '15 minutos', type: 'select', options: ['5 min', '15 min', '30 min', '1 hora'] },
-            { label: 'Desconto minimo para indexar', value: '30%', type: 'select', options: ['10%', '20%', '30%', '40%', '50%'] },
-            { label: 'Reviews minimas', value: '100', type: 'number' },
-            { label: 'Avaliacao minima', value: '4.0', type: 'number' },
+            { label: 'Desconto mínimo para indexar', value: '30%', type: 'select', options: ['10%', '20%', '30%', '40%', '50%'] },
+            { label: 'Reviews mínimas', value: '100', type: 'number' },
+            { label: 'Avaliação mínima', value: '4.0', type: 'number' },
             { label: 'Tag de afiliado', value: 'YOUR_AFFILIATE_ID', type: 'text' },
             { label: 'Max. produtos/categoria', value: '50', type: 'number' },
           ].map((cfg) => (
@@ -223,7 +223,7 @@ export default function AdminAI() {
         </div>
         <div className="mt-4 flex gap-3">
           <button className="px-5 py-2.5 bg-[#0F52BA] hover:bg-[#1565C0] text-white text-sm font-semibold rounded-xl transition-colors shadow-md shadow-[#0F52BA]/20">
-            Salvar Configuracoes
+            Salvar Configurações
           </button>
           <button className="px-5 py-2.5 bg-[#F0F6FF] hover:bg-[#EEF3FF] border border-[#E2EBF6] text-[#0D1B2E] text-sm font-semibold rounded-xl transition-colors flex items-center gap-2">
             <Zap size={14} className="text-[#0F52BA]" /> Executar Agora
