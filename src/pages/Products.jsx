@@ -9,8 +9,8 @@ import ProductCard from '../components/products/ProductCard';
 
 const sortOptions = [
   { value: 'popular', label: 'Mais Populares' },
-  { value: 'price-asc', label: 'Menor Preco' },
-  { value: 'price-desc', label: 'Maior Preco' },
+  { value: 'price-asc', label: 'Menor Preço' },
+  { value: 'price-desc', label: 'Maior Preço' },
   { value: 'rating', label: 'Melhor Avaliacao' },
   { value: 'discount', label: 'Maior Desconto' },
   { value: 'newest', label: 'Mais Recentes' },
@@ -209,7 +209,7 @@ export default function Products() {
                   {/* Price Range */}
                   <div>
                     <h3 className="text-xs font-bold text-[#0D1B2E] uppercase tracking-wider mb-3">
-                      Preco max: <span className="text-[#0F52BA]">${maxPrice}</span>
+                      Preço max: <span className="text-[#0F52BA]">R${maxPrice}</span>
                     </h3>
                     <input
                       type="range"
@@ -218,13 +218,13 @@ export default function Products() {
                       className="w-full accent-[#0F52BA]"
                     />
                     <div className="flex justify-between text-xs text-gray-400 mt-1">
-                      <span>$0</span><span>$100</span>
+                      <span>R$0</span><span>R$100</span>
                     </div>
                   </div>
 
                   {/* Quick Filters */}
                   <div>
-                    <h3 className="text-xs font-bold text-[#0D1B2E] uppercase tracking-wider mb-3">Filtros Rapidos</h3>
+                    <h3 className="text-xs font-bold text-[#0D1B2E] uppercase tracking-wider mb-3">Filtros Rápidos</h3>
                     <div className="flex flex-wrap gap-2">
                       {['Popular', 'WiFi', 'Bluetooth', 'I2C', 'Kit', 'Barato', 'Pro'].map((tag) => (
                         <button

@@ -35,7 +35,7 @@ export default function ProductDetail() {
 
   const handleBuy = () => {
     window.open(product.affiliateLink, '_blank', 'noopener,noreferrer');
-    notify('Abrindo AliExpress com o menor preco', 'success');
+    notify('Abrindo AliExpress com o menor preço', 'success');
   };
 
   const handleWishlist = () => {
@@ -151,7 +151,7 @@ export default function ProductDetail() {
                 ))}
               </div>
               <span className="text-sm font-semibold text-[#0D1B2E]">{product.rating}</span>
-              <span className="text-sm text-gray-400">({formatShortNumber(product.reviews)} avaliacoes)</span>
+              <span className="text-sm text-gray-400">({formatShortNumber(product.reviews)} avaliações)</span>
               <span className="text-sm text-gray-300">•</span>
               <span className="text-sm text-gray-400">{formatShortNumber(product.sold)} vendidos</span>
             </div>
@@ -167,7 +167,7 @@ export default function ProductDetail() {
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Tag size={14} className="text-[#0F52BA]" />
-                <span>Preco no AliExpress: <span className="text-[#0D1B2E] font-semibold">{formatUSD(product.price)}</span></span>
+                <span>Preço no AliExpress: <span className="text-[#0D1B2E] font-semibold">{formatUSD(product.price)}</span></span>
                 <span className="text-gray-200">•</span>
                 <span className="text-[#0F52BA] font-semibold">{product.shipping}</span>
               </div>
@@ -181,7 +181,7 @@ export default function ProductDetail() {
 
             {/* Specs */}
             <div className="mb-6">
-              <h3 className="text-xs font-bold text-[#0D1B2E] uppercase tracking-wider mb-3">Especificacoes</h3>
+              <h3 className="text-xs font-bold text-[#0D1B2E] uppercase tracking-wider mb-3">Especificações</h3>
               <div className="grid grid-cols-2 gap-2">
                 {product.specs.map((spec) => (
                   <div key={spec} className="flex items-center gap-2 text-xs text-[#475569] bg-[#F0F6FF] rounded-lg px-3 py-2 border border-[#E2EBF6]">
@@ -204,7 +204,7 @@ export default function ProductDetail() {
               </button>
 
               <p className="text-center text-xs text-gray-400">
-                Link de afiliado — voce paga o mesmo preco e nos ajuda a manter o site
+                Link de afiliado — você paga o mesmo preço e nos ajuda a manter o site
               </p>
             </div>
           </motion.div>

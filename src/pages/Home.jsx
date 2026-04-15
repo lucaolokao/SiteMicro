@@ -6,7 +6,7 @@ import StatsSection from '../components/home/StatsSection';
 
 export default function Home() {
   return (
-    <main>
+    <main style={{ paddingTop: 'var(--header-h, 64px)' }}>
       <Hero />
       <CategoryGrid />
       <FeaturedProducts />

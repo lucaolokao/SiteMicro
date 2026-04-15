@@ -33,7 +33,7 @@ const features = [
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-[#E2EBF6] mt-8">
+    <footer className="bg-white border-t border-[#E2EBF6]">
       {/* Feature Strip */}
       <div className="bg-[#F0F6FF] border-b border-[#E2EBF6]">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
